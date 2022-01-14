@@ -19,9 +19,9 @@ fn decrypt(input_filename: &str, pad_filename: &str) {
 
 fn convert(input_filename: &str, pad_filename: &str, output_filename: &str, is_encrypting: bool) {
     let input_path = Path::new(&input_filename);
-    let input_file = File::open(&input_path).expect("[ Error ] Failed to open plaintext file");
+    let input_file = File::open(&input_path).expect("[ ERROR ] Failed to open plaintext file");
     let pad_path = Path::new(pad_filename);
-    let pad_file = File::open(&pad_path).expect("[ Error ] Failed to open one-time pad file");
+    let pad_file = File::open(&pad_path).expect("[ ERROR ] Failed to open one-time pad file");
     let mut output_file = File::create(&output_filename).expect("[ ERROR ] Failed to create output file");
 
     let mut pad_buffer = pad_file.bytes();
