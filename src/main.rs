@@ -6,20 +6,18 @@ use std::num::Wrapping;
 
 fn encrypt(input_filename: &str, pad_filename: &str) {
     let output_filename = format!("{}.encrypted", input_filename).to_string();
+    println!("Encrypting {}...", &input_filename);
     convert(input_filename, pad_filename, &output_filename, true);
 }
 
 fn decrypt(input_filename: &str, pad_filename: &str) {
     let mut output_filename: Vec<&str> = input_filename.split('.').collect();
     output_filename.truncate(output_filename.len()-1);
+    println!("Decrypting {}...", &input_filename);
     convert(input_filename, pad_filename, &output_filename.join("."), false);
 }
 
 fn convert(input_filename: &str, pad_filename: &str, output_filename: &str, is_encrypting: bool) {
-    println!("[ INFO ] Input files: {}", &input_filename);
-    println!("[ INFO ] One-time pad: {}", &pad_filename);
-    println!("[ INFO ] Output file: {}", &output_filename);
-
     let input_path = Path::new(&input_filename);
     let input_file = File::open(&input_path).expect("[ Error ] Failed to open plaintext file");
     let pad_path = Path::new(pad_filename);
@@ -40,6 +38,8 @@ fn convert(input_filename: &str, pad_filename: &str, output_filename: &str, is_e
         }
     }
     output_file.write_all(&bytes).expect("[ ERROR ] Failed to write to output file");
+    println!("Created {}", &output_filename);
+    println!("Done.");
 }
 
 fn title() -> String {
