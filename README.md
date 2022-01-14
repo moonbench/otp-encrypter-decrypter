@@ -1,4 +1,4 @@
-# OTP-encrypter-decrypter
+# OTP Encrypter/Decrypter
 A tool to encrypt and decrypt files using one-time pads.
 
 Pads for this program can be generated using https://github.com/moonbench/otp-gen
