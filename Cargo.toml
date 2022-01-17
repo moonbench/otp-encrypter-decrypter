@@ -1,8 +1,8 @@
 [package]
 name = "otpencrypt"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
-description = "One-time pad encryption tool"
+description = "Encrypts and decrypts files with one-time pads"
 license = "GPL-3.0-only"
 
 [dependencies]
