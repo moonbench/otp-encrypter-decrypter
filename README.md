@@ -1,7 +1,7 @@
 # OTP Encrypter/Decrypter
 A tool to encrypt and decrypt files using one-time pads.
 
-Pads for this program can be generated using https://github.com/moonbench/otp-gen
+Pads for this program can be generated using a tool like https://github.com/moonbench/otpgen
 
 ## Purpose
 Uses a user-specified one-time pad to permute an input file, byte by byte, to either encrypt or decrypt its contents.
