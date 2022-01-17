@@ -6,3 +6,4 @@ description = "One-time pad encryption tool"
 license = "GPL-3.0-only"
 
 [dependencies]
+clap = "~2.33.0"

@@ -1,8 +1,9 @@
 use std::path::Path;
 use std::fs::File;
-use std::io::prelude::*;
 use std::io::Write;
+use std::io::prelude::*;
 use std::num::Wrapping;
+use clap::{Arg, App, AppSettings, SubCommand};
 
 fn encrypt(input_filename: &str, pad_filename: &str) {
     let output_filename = format!("{}.encrypted", input_filename).to_string();
@@ -42,29 +43,54 @@ fn convert(input_filename: &str, pad_filename: &str, output_filename: &str, is_e
     println!("Done.");
 }
 
-fn title() -> String {
-    let mut title = String::from(env!("CARGO_PKG_NAME"));
-    title.push_str(&format!(" (v{}) ", env!("CARGO_PKG_VERSION")).to_string());
-    title.push_str(env!("CARGO_PKG_DESCRIPTION"));
-    title
-}
-
-fn usage() {
-    println!("{}", title());
-    println!("Usage: {} <command> <input file> <one-time pad>", env!("CARGO_PKG_NAME"));
-    println!("\nThe available commands are 'encrypt' and 'decrypt'.");
-}
-
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
-    match args.len() {
-        4 => {
-            match &args[1][..] {
-                "encrypt" => encrypt(&args[2], &args[3]),
-                "decrypt" => decrypt(&args[2], &args[3]),
-                _ => usage()
-            }
+    let args = App::new(env!("CARGO_PKG_NAME"))
+                .version(env!("CARGO_PKG_VERSION"))
+                .about(env!("CARGO_PKG_DESCRIPTION"))
+                .setting(AppSettings::SubcommandRequiredElseHelp)
+                .subcommand(SubCommand::with_name("encrypt")
+                    .about("Encrypts a file")
+                    .arg(Arg::with_name("input")
+                        .long("input")
+                        .short("i")
+                        .help("The file to be encrypted")
+                        .takes_value(true)
+                        .required(true))
+                    .arg(Arg::with_name("pad")
+                        .long("pad")
+                        .short("p")
+                        .help("The one-time pad")
+                        .takes_value(true)
+                        .required(true)))
+                .subcommand(SubCommand::with_name("decrypt")
+                    .about("Decrypts a file")
+                    .arg(Arg::with_name("input")
+                        .long("input")
+                        .short("i")
+                        .help("The file to be decrypted")
+                        .takes_value(true)
+                        .required(true))
+                    .arg(Arg::with_name("pad")
+                        .long("pad")
+                        .short("p")
+                        .help("The one-time pad")
+                        .takes_value(true)
+                        .required(true)))
+                .get_matches();
+
+    match args.subcommand() {
+        ("encrypt", sub_args) => {
+            let sub_args = sub_args.unwrap();
+            encrypt(
+                sub_args.value_of("input").unwrap(),
+                sub_args.value_of("pad").unwrap());
         },
-        _ => usage()
+        ("decrypt", sub_args) => {
+            let sub_args = sub_args.unwrap();
+            decrypt(
+                sub_args.value_of("input").unwrap(),
+                sub_args.value_of("pad").unwrap());
+        },
+        _ => unreachable!()
     }
 }
