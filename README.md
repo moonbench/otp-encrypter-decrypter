@@ -47,19 +47,19 @@ OPTIONS:
 
 ## Examples
 ### Encrypting a file
-To encrypt the file `plaintext.txt` using the pad `onetimepad`:
+To encrypt the file `document.txt` using the pad `onetimepad`:
 
 ```
-./target/release/otpencrypt encrypt --input plaintext.txt --pad onetimepad
+./target/release/otpencrypt encrypt --input document.txt --pad onetimepad
 ```
 
-This will produce an encrypted file `plaintext.txt.encrypted`.
+This will produce an encrypted file `document.txt.encrypted`.
 
 ### Decrypting a file
-To decrypt the file `plaintext.txt.encrypted` using the pad `onetimepad`:
+To decrypt the file `document.txt.encrypted` using the pad `onetimepad`:
 
 ```
-./target/release/otpencrypt decrypt --input plaintext.txt.encrypted --pad onetimepad
+./target/release/otpencrypt decrypt --input document.txt.encrypted --pad onetimepad
 ```
 
-This will produce the original `plaintext.txt` file if the same pad is used for both operations.
+This will produce the original `document.txt` file if the same pad is used for both operations.
