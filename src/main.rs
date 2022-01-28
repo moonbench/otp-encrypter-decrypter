@@ -2,23 +2,22 @@ use std::path::Path;
 use std::fs::File;
 use std::io::Write;
 use std::io::prelude::*;
-use std::num::Wrapping;
 use clap::{Arg, App, AppSettings, SubCommand};
 
 fn encrypt(input_filename: &str, pad_filename: &str) {
     let output_filename = format!("{}.encrypted", input_filename).to_string();
     println!("Encrypting {}...", &input_filename);
-    convert(input_filename, pad_filename, &output_filename, true);
+    convert(input_filename, pad_filename, &output_filename);
 }
 
 fn decrypt(input_filename: &str, pad_filename: &str) {
     let mut output_filename: Vec<&str> = input_filename.split('.').collect();
     output_filename.truncate(output_filename.len()-1);
     println!("Decrypting {}...", &input_filename);
-    convert(input_filename, pad_filename, &output_filename.join("."), false);
+    convert(input_filename, pad_filename, &output_filename.join("."));
 }
 
-fn convert(input_filename: &str, pad_filename: &str, output_filename: &str, is_encrypting: bool) {
+fn convert(input_filename: &str, pad_filename: &str, output_filename: &str) {
     let input_path = Path::new(&input_filename);
     let input_file = File::open(&input_path).expect("[ ERROR ] Failed to open plaintext file");
     let pad_path = Path::new(pad_filename);
@@ -32,11 +31,7 @@ fn convert(input_filename: &str, pad_filename: &str, output_filename: &str, is_e
         let pad_byte = pad_buffer.next().expect("[ ERROR ] One-time pad buffer is empty");
         let pad_byte = pad_byte.expect("[ ERROR ] Unable to read from one-time pad file");
         let byte = byte.expect("[ ERROR ] Unable to read from input file");
-        if is_encrypting {
-            bytes.push((Wrapping(byte) + Wrapping(pad_byte)).0);
-        } else {
-            bytes.push((Wrapping(byte) - Wrapping(pad_byte)).0);
-        }
+        bytes.push(byte ^ pad_byte);
     }
     output_file.write_all(&bytes).expect("[ ERROR ] Failed to write to output file");
     println!("Created {}", &output_filename);
