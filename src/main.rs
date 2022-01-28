@@ -19,21 +19,21 @@ fn decrypt(input_filename: &str, pad_filename: &str) {
 
 fn convert(input_filename: &str, pad_filename: &str, output_filename: &str) {
     let input_path = Path::new(&input_filename);
-    let input_file = File::open(&input_path).expect("[ ERROR ] Failed to open plaintext file");
+    let input_file = File::open(&input_path).expect("Failed to open plaintext file");
     let pad_path = Path::new(pad_filename);
-    let pad_file = File::open(&pad_path).expect("[ ERROR ] Failed to open one-time pad file");
-    let mut output_file = File::create(&output_filename).expect("[ ERROR ] Failed to create output file");
+    let pad_file = File::open(&pad_path).expect("Failed to open one-time pad file");
+    let mut output_file = File::create(&output_filename).expect("Failed to create output file");
 
     let mut pad_buffer = pad_file.bytes();
     let input_buffer = input_file.bytes();
     let mut bytes: Vec<u8> = Vec::new();
     for byte in input_buffer {
-        let pad_byte = pad_buffer.next().expect("[ ERROR ] One-time pad buffer is empty");
-        let pad_byte = pad_byte.expect("[ ERROR ] Unable to read from one-time pad file");
-        let byte = byte.expect("[ ERROR ] Unable to read from input file");
+        let pad_byte = pad_buffer.next().expect("One-time pad buffer is empty");
+        let pad_byte = pad_byte.expect("Unable to read from one-time pad file");
+        let byte = byte.expect("Unable to read from input file");
         bytes.push(byte ^ pad_byte);
     }
-    output_file.write_all(&bytes).expect("[ ERROR ] Failed to write to output file");
+    output_file.write_all(&bytes).expect("Failed to write to output file");
     println!("Created {}", &output_filename);
     println!("Done.");
 }
